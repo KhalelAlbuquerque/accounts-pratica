@@ -30,7 +30,7 @@ function operation() {
       }else if(action === 'Depositar'){
         deposit()
       }else if(action === 'Consultar Saldo'){
-
+        showAccountBalace()
       }else if(action === 'Sacar'){
 
       }else if(action === 'Sair'){
@@ -171,4 +171,28 @@ function getAccount(accountName){
   })
 
   return JSON.parse(accountJSON)
+}
+
+
+function showAccountBalace(){
+  inquirer.prompt([
+    {
+      name:'accountName',
+      message:'Digite o nome da conta a se ver o saldo: '
+    }
+  ]).then((answer)=>{
+    
+    const accountName = answer['accountName']
+
+    if(!checkAccount(accountName)){
+      return showAccountBalace()
+    }
+
+    const accountData = getAccount(accountName)
+
+    console.log(chalk.bgBlue.black(`Olá, o saldo da sua conta é de R$${accountData.balance}`))
+
+    operation()
+
+  }).catch((err)=>console.log(err))
 }
