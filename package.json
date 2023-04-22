@@ -4,12 +4,17 @@
   "description": "Sistema pratica node.js",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "keywords": [
     "contas-bancarias",
     "node"
   ],
   "author": "Khalel Albuquerque",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "inquirer": "^8.2.0",
+    "node-fetch": "^2.6.1"
+  }
 }
