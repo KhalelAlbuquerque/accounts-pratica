@@ -27,6 +27,15 @@ function operation() {
       if (action === "Criar Conta") {
         createAccount();
         buildAccount();
+      }else if(action === 'Depositar'){
+        deposit()
+      }else if(action === 'Consultar Saldo'){
+
+      }else if(action === 'Sacar'){
+
+      }else if(action === 'Sair'){
+        console.log(chalk.bgBlue.black("Obrigado por usar o accounts!"))
+        process.exit()
       }
     })
     .catch((err) => {
@@ -77,4 +86,89 @@ function buildAccount() {
       operation()
     })
     .catch((err) => console.log(err));
+}
+
+
+function deposit(){
+
+  inquirer.prompt([
+    {
+      name:"accountName",
+      message: "Qual o nome da sua conta?"
+    }
+  ]).then((answer)=>{
+
+    const accountName = answer['accountName']
+
+    if(!checkAccount(accountName)){
+      return deposit()
+    }else{
+
+      inquirer.prompt([
+        {
+          name:'amount',
+          message:'Quanto vc quer depositar?'
+        },
+      ]).then((answer)=>{
+
+        const amount = answer['amount']
+
+        addAmount(accountName, amount)
+
+        operation()
+
+      }).catch((err)=>console.log(err))
+
+    }
+
+  }).catch((err)=>{
+    console.log(err)
+  })
+
+}
+
+
+function checkAccount(accountName){
+
+  if(!fs.existsSync(`accounts/${accountName}.json`)){
+    console.log(chalk.bgRed.black("Essa conta nao existe, tente novamente"))
+    return false
+  }
+
+  return true
+
+}
+
+
+function addAmount(accountName, amount){
+
+  const accountData = getAccount(accountName)
+
+  if(!amount){
+    console.log(chalk.bgRed.black("Ocorreu um erro, tente novamente mais tarde"))
+    return operation()
+  }
+
+  accountData.balance = parseFloat(amount)+parseFloat(accountData.balance)
+
+  fs.writeFileSync(
+    `accounts/${accountName}.json`,
+    JSON.stringify(accountData),
+    (err)=>{
+      console.log(err)
+      }
+    )
+
+    console.log(chalk.green(`Foi depositado o valor de R$${amount} na sua conta!`))
+
+}
+
+
+function getAccount(accountName){
+  const accountJSON = fs.readFileSync(`accounts/${accountName}.json`, {
+    encoding: 'utf8',
+    tag:'r'
+  })
+
+  return JSON.parse(accountJSON)
 }
