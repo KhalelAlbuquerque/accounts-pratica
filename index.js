@@ -36,6 +36,8 @@ function operation() {
       }else if(action === 'Sair'){
         console.log(chalk.bgBlue.black("Obrigado por usar o accounts!"))
         process.exit()
+      }else if(action=== 'Excluir Conta'){
+        excludeAccount()
       }
     })
     .catch((err) => {
