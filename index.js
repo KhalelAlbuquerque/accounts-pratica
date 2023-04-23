@@ -234,6 +234,10 @@ function withdraw(){
         }
       )
 
+      console.log(chalk.bgGreen.black(`Quantida de R$${answer['amount']} sacada da conta ${accountName}`))
+
+      operation()
+
     }).catch((err)=>console.log(err))
 
   })
