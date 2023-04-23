@@ -17,6 +17,7 @@ function operation() {
           "Consultar Saldo",
           "Depositar",
           "Sacar",
+          "Excluir Conta",
           "Sair",
         ],
       },
@@ -240,5 +241,57 @@ function withdraw(){
 
   })
   .catch((err)=>console.log(err))
+
+}
+
+
+
+function excludeAccount(){
+
+  inquirer.prompt([
+    {
+      name: 'accountName',
+      message: 'Digite o nome da conta que deseja excluir',
+    }
+  ]).then((answer)=>{
+
+    const accountName = answer['accountName']
+
+    if(!accountName){
+      console.log(chalk.bgRed.black(`Digite um nome de alguma conta: `))
+      return operation()
+    }
+
+    if(!checkAccount(accountName)){
+      return operation()
+    }
+
+
+    inquirer.prompt([
+      {
+        name: 'condition',
+        message: 'Deseja mesmo excluir essa conta? (y/n)'
+      }
+    ]).then((answer)=>{
+
+      const condition = answer['condition']
+
+      if(condition === 'y'){
+        fs.unlinkSync(`accounts/${accountName}.json`)
+        console.log(chalk.bgGreen.black(`${accountName} excluida!`))
+  
+        return operation()
+      }else if(condition === 'n'){
+        console.log(chalk.bgRed.black(`Operacao cancelada!`))
+        return operation()
+      }else{
+        console.log(chalk.bgRed.black(`Resposta invalida, tente novamente!`))
+        return operation()
+      }
+
+    }).catch((err)=>console.log(err))
+
+
+  }).catch((err)=>console.log(err))
 
 }
