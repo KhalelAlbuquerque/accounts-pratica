@@ -32,7 +32,7 @@ function operation() {
       }else if(action === 'Consultar Saldo'){
         showAccountBalace()
       }else if(action === 'Sacar'){
-
+        withdraw()
       }else if(action === 'Sair'){
         console.log(chalk.bgBlue.black("Obrigado por usar o accounts!"))
         process.exit()
@@ -195,4 +195,48 @@ function showAccountBalace(){
     operation()
 
   }).catch((err)=>console.log(err))
+}
+
+
+
+function withdraw(){
+
+  inquirer.prompt([
+    {
+      name: "accountName",
+      message: "Digite o nome da conta que vai sacar: "
+    },
+  ])
+  .then((answer)=>{
+
+    const accountName = answer['accountName']
+
+    if(!checkAccount(accountName)){
+      return withdraw()
+    }
+
+    let accountData = getAccount(accountName)
+
+    inquirer.prompt([
+      {
+        name: 'amount',
+        message: "Digite o valor a ser sacado: "
+      }
+    ]).then((answer)=>{
+
+      accountData.balance = parseFloat(accountData.balance)-parseFloat(answer['amount'])
+
+      fs.writeFileSync(
+        `accounts/${accountName}.json`,
+        JSON.stringify(accountData),
+        (err)=>{
+          console.log(err)
+        }
+      )
+
+    }).catch((err)=>console.log(err))
+
+  })
+  .catch((err)=>console.log(err))
+
 }
