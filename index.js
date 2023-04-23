@@ -282,7 +282,7 @@ function excludeAccount(){
   
         return operation()
       }else if(condition === 'n'){
-        console.log(chalk.bgRed.black(`Operacao cancelada!`))
+        console.log(chalk.bgRed.black(`Operacao cancelada! `))
         return operation()
       }else{
         console.log(chalk.bgRed.black(`Resposta invalida, tente novamente!`))
